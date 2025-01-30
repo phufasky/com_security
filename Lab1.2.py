@@ -25,14 +25,14 @@ print(originaAlpha)
 
 blank = r.recvlines(2)
 
-mapAlpha = r.recvline().decode('utf-8').strip()  # Strip spaces/newlines
+mapAlpha = r.recvline().decode('utf-8').strip()  
 print(mapAlpha)
 
 blank = r.recvline()
 
-response = r.recvline().decode('utf-8').strip()  # Strip spaces/newlines
+response = r.recvline().decode('utf-8').strip()  
 print(response)
-plainText = response.split(": ")[1].strip()  # Strip spaces/newlines from the plaintext
+plainText = response.split(": ")[1].strip()  
 print("Plain Text:",plainText)
 
 mapping = {orig: map for orig, map in zip(originaAlpha, mapAlpha)}
@@ -44,19 +44,18 @@ print("Answer:",cipherText)
 r.sendline(cipherText.encode('utf-8'))
 
 p = r.recvuntil(b': ')
-response = r.recvline().decode('utf-8').strip()  # Strip spaces/newlines
+response = r.recvline().decode('utf-8').strip()  
 print(response)
 
 x = r.recvuntil(b': ').decode('utf-8')
 #print(x)
 
-cipherText = response.split(": ")[1].strip()  # Strip spaces/newlines
+cipherText = response.split(": ")[1].strip()  
 print("CipherText:",cipherText)
 
 answer = decrypt(cipherText, reverse_mapping)
 print("Answer:",answer)
 
-# Send the decrypted answer
 r.sendline(answer.encode('utf-8'))
 
 response = r.recvline().decode('utf-8')

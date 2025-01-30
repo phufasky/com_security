@@ -5,10 +5,10 @@ port = 1111
 
 r = remote(host, port)
 
-def hex_to_bytes(hex_str):
+def hex_to_byte(hex_str):
     return bytes.fromhex(hex_str)
 
-def xor_bytes(bytes1, bytes2):
+def xor_byte(bytes1, bytes2):
     return bytes(a ^ b for a, b in zip(bytes1, bytes2))
 
 response = r.recvline().decode('utf-8')
@@ -21,21 +21,21 @@ print(question)
 response = r.recvline().decode('utf-8')
 print(response)
 cipherText_hex = response.split(":")[1].strip()
-cipherText_byte = hex_to_bytes(cipherText_hex)
+cipherText_byte = hex_to_byte(cipherText_hex)
 print(cipherText_byte)
 
 response = r.recvline().decode('utf-8')
 print(response)
 otp_hex = response.split(":")[1].strip()
-otp_byte = hex_to_bytes(otp_hex)
+otp_byte = hex_to_byte(otp_hex)
 print(otp_byte)
 
-plaintext_bytes = xor_bytes(cipherText_byte, otp_byte)
-plaintext = plaintext_bytes.decode(errors="ignore")  # Ignore non-printable characters
+plaintext_bytes = xor_byte(cipherText_byte, otp_byte)
+plaintext = plaintext_bytes.decode('utf-8') 
 
-print(f"Recovered Plaintext: {plaintext}")
+print("Recovered Plaintext:",plaintext)
 
-r.sendline(plaintext)
+r.sendline(plaintext.encode('utf-8'))
 
-response = r.recvline()
+response = r.recvline().decode('utf-8').strip()
 print(response)
